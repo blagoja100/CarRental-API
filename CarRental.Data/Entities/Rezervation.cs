@@ -24,9 +24,9 @@ namespace CarRental.Data.Entities
 
 		public string CarPlateNumber { get; set; }
 
-		public DateTime? PickUpDate { get; set; }
+		public DateTime PickUpDate { get; set; }
 
-		public DateTime? ReturnDate { get; set; }
+		public DateTime ReturnDate { get; set; }
 
 		public decimal DepositFee { get; set; }
 

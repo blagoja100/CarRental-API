@@ -46,10 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarTypes.cs" />
     <Compile Include="ClientAccountService.cs" />
     <Compile Include="Interfaces\IClientAccountService.cs" />
+    <Compile Include="Interfaces\IRezervationService.cs" />
     <Compile Include="Mappers\ClientAccountMapper.cs" />
+    <Compile Include="Mappers\RezervationMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RezervationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CarRental.Data\CarRental.Data.csproj">

@@ -53,7 +53,7 @@ namespace CarRental.Service
 		/// Creates a new client account.
 		/// </summary>
 		/// <param name="parameters">Client account creation parameters. Contains all the client account information.</param>
-		/// <returns></returns>
+		/// <returns>Client account model.</returns>
 		public ClientAccountModel Add(ClientAccountCreationParams parameters)
 		{
 			if (parameters == null)
@@ -83,7 +83,7 @@ namespace CarRental.Service
 		/// Updates a client account.
 		/// </summary>
 		/// <param name="parameters">Client account modification parameters. Contains all the client account information as well as the client identifier.</param>
-		/// <returns></returns>
+		/// <returns>Client account model.</returns>
 		public ClientAccountModel Update(ClientAccountModificationParams parameters)
 		{
 			if (parameters == null)
@@ -109,6 +109,43 @@ namespace CarRental.Service
 			this.dbContext.SaveChanges();
 
 			return dbClientAccount.ToModel();			
+		}
+
+		/// <summary>
+		/// Calculates total fees (Rental rate fee, Cancellation fee,  Deposit fee) from all reservations for specified client.
+		/// </summary>
+		/// <param name="clientId">Client identifier.</param>
+		/// <returns>Client balance model.</returns>
+		public ClientBalanceModel GetClientAccountBalance(int clientId)
+		{
+			if (clientId < 1)
+			{
+				throw new InvalidOperationException("Invalid parameters.");
+			}
+
+			var dbClientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == clientId);
+			if (dbClientAccount == null)
+			{
+				throw new InvalidOperationException("Client account not found.");
+			}
+
+			var clientBalanceModel = new ClientBalanceModel
+			{
+				ClientAccount = dbClientAccount.ToModel(),
+			};
+
+			var dbClientRezervations = this.dbContext.Rezervations.Where(x => x.ClientId == clientId).ToList();
+
+			if(!dbClientRezervations.Any())
+			{
+				return clientBalanceModel;
+			}
+
+			clientBalanceModel.TotalRentalFee = dbClientRezervations.Where(x => x.IsReturned).Sum(x => x.RentaltFee);
+			clientBalanceModel.TotalCancellationFee = dbClientRezervations.Where(x => x.CancellationFee.HasValue && x.IsCancelled).Sum(x => x.CancellationFee.Value);
+			clientBalanceModel.TotalFees = clientBalanceModel.TotalCancellationFee + clientBalanceModel.TotalRentalFee;
+
+			return clientBalanceModel;
 		}
 	}
 }

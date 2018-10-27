@@ -33,5 +33,12 @@ namespace CarRental.Service.Interfaces
 		/// <param name="parameters">Client account modification parameters. Contains all the client account information as well as the client identifier.</param>
 		/// <returns></returns>
 		ClientAccountModel Update(ClientAccountModificationParams parameters);
+
+		/// <summary>
+		/// Calculates total fees (Rental rate fee, Cancellation fee,  Deposit fee) from all reservations for specified client.
+		/// </summary>
+		/// <param name="clientId">Client identifier.</param>
+		/// <returns>Client balance model.</returns>
+		ClientBalanceModel GetClientAccountBalance(int clientId);
 	}
 }

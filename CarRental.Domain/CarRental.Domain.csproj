@@ -41,10 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Models\ClientAccountModel.cs" />
+    <Compile Include="Models\ClientBalanceModel.cs" />
+    <Compile Include="Models\RezervationModel.cs" />
     <Compile Include="Parameters\ClientAccountBaseParams.cs" />
     <Compile Include="Parameters\ClientAccountModificationParams.cs" />
     <Compile Include="Parameters\ClientAccountCreationParams.cs" />
+    <Compile Include="Parameters\ClientAccountRetrievalParams.cs" />
+    <Compile Include="Parameters\RezervationBaseParameters.cs" />
+    <Compile Include="Parameters\RezervationModificationParameters.cs" />
+    <Compile Include="Parameters\RezervationCreationParameters.cs" />
+    <Compile Include="Parameters\RezervationBrowsingParams.cs" />
+    <Compile Include="Parameters\RezervationRetrievalParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
