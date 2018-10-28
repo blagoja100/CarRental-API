@@ -112,8 +112,13 @@ namespace CarRental.Service
 		}
 
 		/// <summary>
-		/// Calculates total fees (Rental rate fee, Cancellation fee,  Deposit fee) from all reservations for specified client.
+		/// Calculates total fees. 
 		/// </summary>
+		/// <remarks>
+		///		Calculates Rental rate fee, Cancellation fee from all reservations for specified client.
+		///		
+		///		NOTE: The calculation includes only the rental fees that come from rezervations that are completed or cancelled. 
+		/// </remarks>
 		/// <param name="clientId">Client identifier.</param>
 		/// <returns>Client balance model.</returns>
 		public ClientBalanceModel GetClientAccountBalance(int clientId)

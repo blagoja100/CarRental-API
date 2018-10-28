@@ -137,7 +137,7 @@ namespace CarRental.Service
 			{
 				dbRezervation.RentaltFee = CarTypes.GetCarType((CarTypeEnum)dbRezervation.CarType).GetRentalFee(dbRezervation.PickUpDate, DateTime.Now);
 			}
-			dbRezervation.RentaltFee = dbRezervation.RentaltFee - dbRezervation.DepositFee;
+			dbRezervation.RentaltFee = dbRezervation.RentaltFee;
 			dbRezervation.CancelationFeeRate = 0.0m;
 			dbRezervation.CancellationFee = 0.0m;
 			this.dbContext.SaveChanges();
