@@ -18,6 +18,11 @@ namespace CarRental.Domain.Parameters
 		public int RezervationId { get; set; }
 
 		/// <summary>
+		/// Rate under which the cancelation fee is 
+		/// </summary>
+		public decimal? CancelationFeeRate { get; set; }
+
+		/// <summary>
 		/// Client account model.
 		/// </summary>
 		public ClientAccountModificationParams ClientAccount { get; set; }

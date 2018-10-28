@@ -2,61 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using CarRental.Data;
-using CarRental.Data.Entities;
 using CarRental.Domain.Parameters;
 using CarRental.Service;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
-namespace CarRental.Tests.ClientAccountTests
+namespace CarRental.Tests.ServiceTests
 {
 	[TestClass]
-	public class ClientAccountServiceTest
+	public class ClientAccountServiceTests : BaseTestInitialization
 	{
-		private SqliteConnection connection;
-		private DbContextOptions<CarRentalDbContext> dbContextOptions;
-
 		[TestInitialize]
-		public void Setup()
+		public override void InitializeTest()
 		{
-			this.connection = new SqliteConnection("DataSource=:memory:");
-			this.connection.Open();
-
-			this.dbContextOptions = new DbContextOptionsBuilder<CarRentalDbContext>()
-				.UseSqlite(connection).Options;
-			
-			// Create the schema in the database
-			using (var context = new CarRentalDbContext(this.dbContextOptions))
-			{
-				context.Database.EnsureCreated();
-			}
-
-			// Add data to the database.
-			using (var context = new CarRentalDbContext(this.dbContextOptions))
-			{
-				context.ClientAccounts.Add(new ClientAccount
-				{
-					Email = "client1@mail.com",
-					FullName = "Client Name 1",
-					Phone = "+11111",
-				});
-
-				context.ClientAccounts.Add(new ClientAccount
-				{
-					Email = "client2@mail.com",
-					FullName = "Client Name 2",
-					Phone = "+22222",
-				});
-				context.SaveChanges();
-			}
-		}
-
-		[TestCleanup]
-		public void Finish()
-		{
-			this.connection.Close();
+			this.SetupClientService();
 		}
 
 		[TestMethod]

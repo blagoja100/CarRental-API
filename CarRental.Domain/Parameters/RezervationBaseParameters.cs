@@ -30,11 +30,6 @@ namespace CarRental.Domain.Parameters
 		/// <summary>
 		/// Date of car return.
 		/// </summary>
-		public DateTime ReturnDate { get; set; }
-
-		/// <summary>
-		/// Rate under which the cancelation fee is 
-		/// </summary>
-		public decimal? CancelationFeeRate { get; set; }
+		public DateTime ReturnDate { get; set; }		
 	}
 }

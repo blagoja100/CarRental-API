@@ -49,8 +49,8 @@ namespace CarRental.Service
 			if(parameters.ClientAccount == null
 				|| !Enum.IsDefined(typeof(CarTypeEnum), parameters.CarType)
 				|| string.IsNullOrWhiteSpace(parameters.CarPlateNumber)
-				|| parameters.PickUpDate > DateTime.Now
-				|| parameters.ReturnDate > parameters.PickUpDate)
+				|| parameters.PickUpDate < DateTime.Now
+				|| parameters.ReturnDate < parameters.PickUpDate)
 			{
 				throw new InvalidOperationException("Invalid parameters.");
 			}
@@ -62,11 +62,14 @@ namespace CarRental.Service
 			{
 				ClientId = clientAccount.ClientId,
 				CarPlateNumber = parameters.CarPlateNumber,
+				PickUpDate = parameters.PickUpDate,
+				ReturnDate = parameters.ReturnDate,
 			};
 			
 			//get the car type
 			var carType = CarTypes.GetCarType(parameters.CarType);
 
+			dbRezervation.CarType = (int)carType.Type;
 			dbRezervation.RentaltFee = carType.GetRentalFee(parameters.PickUpDate, parameters.ReturnDate);
 			dbRezervation.DepositFee = carType.GetDepositFee(dbRezervation.RentaltFee);
 

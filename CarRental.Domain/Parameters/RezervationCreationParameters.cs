@@ -13,11 +13,6 @@ namespace CarRental.Domain.Parameters
 	public class RezervationCreationParameters : RezervationBaseParameters
 	{
 		/// <summary>
-		/// Rezervation identifier.
-		/// </summary>
-		public int RezervationId { get; set; }
-
-		/// <summary>
 		/// Client account model.
 		/// </summary>
 		public ClientAccountCreationParams ClientAccount { get; set; }
