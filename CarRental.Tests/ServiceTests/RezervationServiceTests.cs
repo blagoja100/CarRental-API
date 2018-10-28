@@ -59,18 +59,18 @@ namespace CarRental.Tests.ServiceTests
 
 				Assert.AreEqual(rezervationModel.RentaltFee, rentalFee);
 				Assert.AreEqual(rezervationModel.DepositFee, depositFee);
-				Assert.IsNull(rezervationModel.CancelationFeeRate);				
-				
+				Assert.IsNull(rezervationModel.CancelationFeeRate);
+
 				// validate thrown exceptions
 				try
 				{
 					rezervationService.CreateBooking(null);
 					Assert.Fail();
 				}
-				catch(ArgumentNullException)
+				catch (ArgumentNullException)
 				{
 				}
-				catch(Exception)
+				catch (Exception)
 				{
 					Assert.Fail();
 				}
@@ -149,12 +149,109 @@ namespace CarRental.Tests.ServiceTests
 				var carType = CarTypes.GetCarType((CarTypeEnum)dbRezervation.CarType);
 
 				// Test the actual calculations in the car type class.
-				var cancellationFee = carType.CancellationFee * cancelationFeeRate;				
+				var cancellationFee = carType.CancellationFee * cancelationFeeRate;
 
 				dbRezervation = context.Rezervations.Single(x => x.RezervationId == dbRezervation.RezervationId);
 				Assert.IsTrue(dbRezervation.IsCancelled);
 				Assert.AreEqual(dbRezervation.CancellationFee, cancellationFee);
 				Assert.AreEqual(dbRezervation.CancelationFeeRate, cancelationFeeRate);
+			}
+		}
+
+		[TestMethod]
+		public void FindRezervationsTest()
+		{
+			using (var context = new CarRentalDbContext(this.dbContextOptions))
+			{
+				var dbRezervations = context.Rezervations.ToList();
+				var clientAccountService = new ClientAccountService(context);
+				var rezervationService = new RezervationService(context, clientAccountService);
+
+				var parameters = new RezervationBrowsingParams
+				{
+					ClientEmail = "client1@mail.com",
+					ClientFullName = "Client Name 1",
+					ClientPhone = "+11111",
+					PickUpDateFrom = DateTime.Today.AddDays(1),
+					PickUpDateTo = DateTime.Today.AddDays(2),
+					IsBooked = true,
+				};
+
+				var rezervations = rezervationService.FindRezervations(parameters);
+				Assert.IsTrue(rezervations.Count == 1);
+
+				parameters = new RezervationBrowsingParams
+				{
+					ClientEmail = "client1@mail.com",
+					ClientFullName = "Client Name 1",
+					ClientPhone = "+11111",
+					PickUpDateFrom = DateTime.Today.AddDays(1),
+					PickUpDateTo = DateTime.Today.AddDays(2),
+					IsPickedUp = true,
+				};
+
+				rezervations = rezervationService.FindRezervations(parameters);
+				Assert.IsTrue(rezervations.Count == 2);
+
+				parameters = new RezervationBrowsingParams
+				{
+					IsCancelled = true,
+				};
+
+				rezervations = rezervationService.FindRezervations(parameters);
+				Assert.IsTrue(rezervations.Count == 1);
+
+				parameters = new RezervationBrowsingParams
+				{
+					IsReturned = true,
+				};
+
+				rezervations = rezervationService.FindRezervations(parameters);
+				Assert.IsTrue(rezervations.Count == 2);
+
+				parameters = new RezervationBrowsingParams
+				{
+					MaxItems = 2,
+					StartIndex = 1,
+				};
+
+				rezervations = rezervationService.FindRezervations(parameters);
+				Assert.IsTrue(rezervations.Count == 2);
+
+				try
+				{
+					rezervationService.FindRezervations(null);
+					Assert.Fail();
+				}
+				catch (ArgumentNullException)
+				{
+				}
+				catch
+				{
+					Assert.Fail();
+				}
+			}
+		}
+
+		[TestMethod]
+		public void GetClientAccountBalaceTest()
+		{
+			using (var context = new CarRentalDbContext(this.dbContextOptions))
+			{				
+				var clientAccountService = new ClientAccountService(context);
+				var rezervationService = new RezervationService(context, clientAccountService);
+
+				var clientAccountBalance = clientAccountService.GetClientAccountBalance(1);
+
+				Assert.AreEqual(clientAccountBalance.TotalRentalFee, 2304.00m);
+				Assert.AreEqual(clientAccountBalance.TotalFees, 2304.00m);
+				Assert.AreEqual(clientAccountBalance.TotalCancellationFee, 0.00m);
+
+				clientAccountBalance = clientAccountService.GetClientAccountBalance(2);
+
+				Assert.AreEqual(clientAccountBalance.TotalRentalFee, 0.00m);
+				Assert.AreEqual(clientAccountBalance.TotalCancellationFee, 50.00m);
+				Assert.AreEqual(clientAccountBalance.TotalFees, 50.00m);
 			}
 		}
 	}

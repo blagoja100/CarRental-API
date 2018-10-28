@@ -50,7 +50,7 @@ namespace CarRental.Api.Controllers
 		}
 
 		[HttpPost]		
-		public ICollection<RezervationModel> GetAllRezervations(RezervationBrowsingParams parameters)
+		public RezervationCollectionModel GetAllRezervations(RezervationBrowsingParams parameters)
 		{
 			return this.rezervationService.FindRezervations(parameters);
 		}

@@ -36,6 +36,32 @@ namespace CarRental.Tests.ServiceTests
 				Assert.AreEqual(parameters.Phone, clientAccountModel.Phone);
 				Assert.AreEqual(parameters.FullName, clientAccountModel.FullName);
 				Assert.IsTrue(clientAccountModel.ClientId > 0);
+
+				try
+				{
+					service.Add(null);
+					Assert.Fail();
+				}
+				catch (ArgumentNullException)
+				{
+				}
+				catch
+				{
+					Assert.Fail();
+				}
+
+				try
+				{
+					service.Add(new ClientAccountCreationParams());
+					Assert.Fail();
+				}
+				catch (InvalidOperationException)
+				{
+				}
+				catch
+				{
+					Assert.Fail();
+				}
 			}
 		}
 
@@ -59,6 +85,32 @@ namespace CarRental.Tests.ServiceTests
 				Assert.AreEqual(parameters.Phone, clientAccountModel.Phone);
 				Assert.AreEqual(parameters.FullName, clientAccountModel.FullName);
 				Assert.AreEqual(parameters.ClientId, clientAccountModel.ClientId);
+
+				try
+				{
+					service.Update(null);
+					Assert.Fail();
+				}
+				catch (ArgumentNullException)
+				{
+				}
+				catch
+				{
+					Assert.Fail();
+				}
+
+				try
+				{
+					service.Update(new ClientAccountModificationParams());
+					Assert.Fail();
+				}
+				catch (InvalidOperationException)
+				{
+				}
+				catch
+				{
+					Assert.Fail();
+				}
 			}
 		}
 
@@ -75,6 +127,19 @@ namespace CarRental.Tests.ServiceTests
 				Assert.AreEqual(clientAccount.Email, clientAccountModel.Email);
 				Assert.AreEqual(clientAccount.Phone, clientAccountModel.Phone);
 				Assert.AreEqual(clientAccount.FullName, clientAccountModel.FullName);
+	
+				try
+				{
+					service.Get(-1);
+					Assert.Fail();
+				}
+				catch (InvalidOperationException)
+				{
+				}
+				catch
+				{
+					Assert.Fail();
+				}
 			}
 		}
 	}

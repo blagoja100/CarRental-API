@@ -110,7 +110,23 @@ namespace CarRental.Tests
 					RentaltFee = 50.00m,
 					DepositFee = 3.5m,
 					IsCancelled = true,
+					CancelationFeeRate = 2,
+					CancellationFee = 50.0m,
 					ClientId = client2.ClientId,
+				});
+
+				context.Rezervations.Add(new Rezervation
+				{
+					PickUpDate = DateTime.Today.AddDays(1), // set to Today for simplicity.
+					ReturnDate = DateTime.Today.AddDays(5),
+					CarPlateNumber = "CA1234AC",
+					CarType = 2,
+					RentaltFee = 1152.00m,
+					DepositFee = 138.24m,
+					IsPickedUp = true,
+					IsReturned = true,
+					ClientId = client1.ClientId,
+
 				});
 
 				context.SaveChanges();

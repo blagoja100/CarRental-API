@@ -207,12 +207,12 @@ namespace CarRental.Service
 
 			if (!string.IsNullOrWhiteSpace(parameters.ClientFullName))
 			{
-				dbRezervations = dbRezervations.Include(x => x.ClientAccount).Where(x => x.ClientAccount.Email == parameters.ClientFullName);
+				dbRezervations = dbRezervations.Include(x => x.ClientAccount).Where(x => x.ClientAccount.FullName == parameters.ClientFullName);
 			}
 
 			if (!string.IsNullOrWhiteSpace(parameters.ClientPhone))
 			{
-				dbRezervations = dbRezervations.Include(x => x.ClientAccount).Where(x => x.ClientAccount.Email == parameters.ClientPhone);
+				dbRezervations = dbRezervations.Include(x => x.ClientAccount).Where(x => x.ClientAccount.Phone == parameters.ClientPhone);
 			}
 
 			if(parameters.PickUpDateFrom.HasValue)
@@ -238,7 +238,7 @@ namespace CarRental.Service
 
 			if (parameters.IsPickedUp)
 			{
-				dbRezervations = dbRezervations.Where(x => x.IsPickedUp && !x.IsPickedUp && !x.IsCancelled);
+				dbRezervations = dbRezervations.Where(x => x.IsPickedUp && !x.IsCancelled);
 			}
 
 			if (parameters.IsCancelled)
