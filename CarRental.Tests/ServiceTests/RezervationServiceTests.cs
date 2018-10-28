@@ -62,32 +62,7 @@ namespace CarRental.Tests.ServiceTests
 				Assert.IsNull(rezervationModel.CancelationFeeRate);
 
 				// validate thrown exceptions
-				try
-				{
-					rezervationService.CreateBooking(null);
-					Assert.Fail();
-				}
-				catch (ArgumentNullException)
-				{
-				}
-				catch (Exception)
-				{
-					Assert.Fail();
-				}
-
-				try
-				{
-					rezervationService.CreateBooking(new RezervationCreationParameters());
-					Assert.Fail();
-				}
-				catch (InvalidOperationException e)
-				{
-					Assert.AreEqual("Invalid parameters.", e.Message);
-				}
-				catch (Exception)
-				{
-					Assert.Fail();
-				}
+				Assert.IsNull(rezervationService.CreateBooking(null));	
 			}
 		}
 
