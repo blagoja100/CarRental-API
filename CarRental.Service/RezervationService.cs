@@ -53,7 +53,7 @@ namespace CarRental.Service
 			{
 				clientAccount = this.clientAccountService.Add(parameters.ClientAccount);
 			}
-			else
+			else if(parameters.ClientAccount == null && clientAccount == null)
 			{
 				throw new InvalidOperationException("Client account not provided.");
 			}

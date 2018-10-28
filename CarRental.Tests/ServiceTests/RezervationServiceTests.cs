@@ -61,8 +61,38 @@ namespace CarRental.Tests.ServiceTests
 				Assert.AreEqual(rezervationModel.DepositFee, depositFee);
 				Assert.IsNull(rezervationModel.CancelationFeeRate);
 
-				// validate thrown exceptions
-				Assert.IsNull(rezervationService.CreateBooking(null));	
+				var createRezervationParametersExistingClient = new RezervationCreationParameters
+				{
+					PickUpDate = DateTime.Today.AddDays(1), // set to Today for simplicity.
+					ReturnDate = DateTime.Today.AddDays(5),
+					CarPlateNumber = "CA1234AC",
+					CarType = CarTypeEnum.Family,
+					ClientId = context.ClientAccounts.First().ClientId,
+				};
+				rezervationModel = rezervationService.CreateBooking(createRezervationParametersExistingClient);
+				Assert.IsTrue(rezervationModel.RezervationId > 0);
+
+				try
+				{
+					var createRezervationParametersNoClient = new RezervationCreationParameters
+					{
+						PickUpDate = DateTime.Today.AddDays(1), // set to Today for simplicity.
+						ReturnDate = DateTime.Today.AddDays(5),
+						CarPlateNumber = "CA1234AC",
+						CarType = CarTypeEnum.Family,
+					};
+					rezervationModel = rezervationService.CreateBooking(createRezervationParametersNoClient);
+					Assert.Fail();
+
+				}
+				catch (InvalidOperationException)
+				{
+				}		
+				catch
+				{
+					Assert.Fail();
+				}
+
 			}
 		}
 
