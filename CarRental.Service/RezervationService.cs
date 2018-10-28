@@ -171,7 +171,10 @@ namespace CarRental.Service
 
 			dbRezervation.IsCancelled = true;
 
-			dbRezervation.CancellationFee = CarTypes.GetCarType((CarTypeEnum)dbRezervation.CarType).GetCancellationFee(cancelationFeeRate);
+			var cancelationFee = CarTypes.GetCarType((CarTypeEnum)dbRezervation.CarType).GetCancellationFee(cancelationFeeRate);
+
+			// cancelation fee cannot be bigger than the rental fee.
+			dbRezervation.CancellationFee = cancelationFee > dbRezervation.RentaltFee ? dbRezervation.RentaltFee : cancelationFee;
 			dbRezervation.CancelationFeeRate = cancelationFeeRate;
 			
 			// we set this to 0 since the car is not rented.

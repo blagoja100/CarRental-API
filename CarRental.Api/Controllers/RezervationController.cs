@@ -59,13 +59,29 @@ namespace CarRental.Api.Controllers
 		[HttpPost]
 		public RezervationModel BookRezervation(RezervationCreationParameters parameters)
 		{
-			if ((parameters.ClientAccount == null && parameters.ClientId < 1)
-				|| !Enum.IsDefined(typeof(CarTypeEnum), parameters.CarType)
-				|| string.IsNullOrWhiteSpace(parameters.CarPlateNumber)
-				|| parameters.PickUpDate < DateTime.Now
-				|| parameters.ReturnDate < parameters.PickUpDate)
+			if (!Enum.IsDefined(typeof(CarTypeEnum), parameters.CarType))
 			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Invalid parameters." });
+				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Car type is not valid." });
+			}
+
+			if (string.IsNullOrWhiteSpace(parameters.CarPlateNumber))				
+			{
+				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Car plate number is not provided." });
+			}
+
+			if (parameters.PickUpDate < DateTime.Now)				
+			{
+				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Pick-up date is invalid." });
+			}
+
+			if (parameters.ReturnDate < parameters.PickUpDate)
+			{
+				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Return date is invalid." });
+			}
+
+			if (parameters.ClientAccount == null && parameters.ClientId < 1)
+			{
+				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Client not provided." });
 			}
 
 			return this.rezervationService.CreateBooking(parameters);
