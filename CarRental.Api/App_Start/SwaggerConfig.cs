@@ -2,13 +2,24 @@ using System.Web.Http;
 using WebActivatorEx;
 using CarRental.Api;
 using Swashbuckle.Application;
+using System.Web.Configuration;
+using Swashbuckle.Swagger;
+using System.Web.Http.Description;
+using System.Collections.Generic;
+using System.Text;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
 namespace CarRental.Api
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public class SwaggerConfig
     {
+		/// <summary>
+		/// 
+		/// </summary>
         public static void Register()
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
@@ -20,7 +31,7 @@ namespace CarRental.Api
                         // However, there may be situations (e.g. proxy and load-balanced environments) where this does not
                         // resolve correctly. You can workaround this by providing your own code to determine the root URL.
                         //
-                        //c.RootUrl(req => GetRootUrlFromAppConfig());
+                        // c.RootUrl(req => GetRootUrl());
 
                         // If schemes are not explicitly provided in a Swagger 2.0 document, then the scheme used to access
                         // the docs is taken as the default. If your API supports multiple schemes and you want to be explicit
@@ -101,7 +112,8 @@ namespace CarRental.Api
                         // those comments into the generated docs and UI. You can enable this by providing the path to one or
                         // more Xml comment files.
                         //
-                        c.IncludeXmlComments(GetXmlCommentsPath());
+                        c.IncludeXmlComments(GetXmlCommentsApiPath());
+						c.IncludeXmlComments(GetXmlCommentsDomainPath());
 
                         // Swashbuckle makes a best attempt at generating Swagger compliant JSON schemas for the various types
                         // exposed in your API. However, there may be occasions when more control of the output is needed.
@@ -252,9 +264,25 @@ namespace CarRental.Api
                     });
         }
 
-		private static string GetXmlCommentsPath()
+		private static string GetRootUrl()
+		{
+			var url = WebConfigurationManager.AppSettings["ApiRootUrl"];
+			// Remove trailing slash
+			if (url.EndsWith("/"))
+			{
+				url = url.Substring(0, url.Length - 1);
+			}
+			return url;
+		}
+
+		private static string GetXmlCommentsApiPath()
 		{
 			return string.Format(@"{0}\bin\CarRental.Api.xml", System.AppDomain.CurrentDomain.BaseDirectory);
 		}
-    }
+
+		private static string GetXmlCommentsDomainPath()
+		{
+			return string.Format(@"{0}\bin\CarRental.Domain.xml", System.AppDomain.CurrentDomain.BaseDirectory);
+		}
+	}
 }

@@ -8,21 +8,20 @@ using System.Threading.Tasks;
 namespace CarRental.Domain.Parameters
 {
 	/// <summary>
-	/// Client retrieval parameters.
+	/// Rezervation cancellation parameters.
 	/// </summary>
-	public class ClientAccountRetrievalParams
+	public class RezervationCancellationParams
 	{
 		/// <summary>
-		/// Create new instance of the class.
-		/// </summary>
-		public ClientAccountRetrievalParams()
-		{
-		}
-
-		/// <summary>
-		/// Client account identifier.
+		/// Rezervation identifier.
 		/// </summary>
 		[Required]
-		public int ClientId { get; set; }
+		public int RezervationId { get; set; }
+
+		/// <summary>
+		/// Cancelation fee rate. Used for cancellation fee adjustment.
+		/// </summary>
+		[Required]
+		public decimal CancellationFeeRate { get; set; }
 	}
 }

@@ -16,5 +16,10 @@ namespace CarRental.Domain.Parameters
 		/// Client account model.
 		/// </summary>
 		public ClientAccountCreationParams ClientAccount { get; set; }
+
+		/// <summary>
+		/// Client account identifier.
+		/// </summary>
+		public int ClientId { get; set; }
 	}
 }

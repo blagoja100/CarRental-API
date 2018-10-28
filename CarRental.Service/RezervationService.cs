@@ -41,22 +41,23 @@ namespace CarRental.Service
 		/// <returns></returns>
 		public RezervationModel CreateBooking(RezervationCreationParameters parameters)
 		{
-			if(parameters == null)
+			if (parameters == null)
 			{
-				throw new ArgumentNullException(nameof(parameters));
-			}
+				return null;
+			}			
 
-			if(parameters.ClientAccount == null
-				|| !Enum.IsDefined(typeof(CarTypeEnum), parameters.CarType)
-				|| string.IsNullOrWhiteSpace(parameters.CarPlateNumber)
-				|| parameters.PickUpDate < DateTime.Now
-				|| parameters.ReturnDate < parameters.PickUpDate)
+			//try to get a client account first
+			var clientAccount = this.clientAccountService.Get(parameters.ClientId);
+
+			if(clientAccount == null && parameters.ClientAccount != null)
 			{
-				throw new InvalidOperationException("Invalid parameters.");
+				clientAccount = this.clientAccountService.Add(parameters.ClientAccount);
 			}
-
-			//create a client account
-			var clientAccount = this.clientAccountService.Add(parameters.ClientAccount);
+			else
+			{
+				throw new InvalidOperationException("Client account not provided.");
+			}
+			
 
 			var dbRezervation = new Rezervation()
 			{

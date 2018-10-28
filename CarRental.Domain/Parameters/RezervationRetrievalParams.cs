@@ -11,7 +11,7 @@ namespace CarRental.Domain.Parameters
 	/// </summary>
 	public class RezervationRetrievalParams
 	{
-		// <summary>
+		/// <summary>
 		/// Rezervation identifier.
 		/// </summary>
 		public int RezervationId { get; set; }

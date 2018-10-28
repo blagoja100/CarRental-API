@@ -128,18 +128,8 @@ namespace CarRental.Tests.ServiceTests
 				Assert.AreEqual(clientAccount.Phone, clientAccountModel.Phone);
 				Assert.AreEqual(clientAccount.FullName, clientAccountModel.FullName);
 	
-				try
-				{
-					service.Get(-1);
-					Assert.Fail();
-				}
-				catch (InvalidOperationException)
-				{
-				}
-				catch
-				{
-					Assert.Fail();
-				}
+				clientAccountModel = service.Get(-1);
+				Assert.IsNull(clientAccountModel);				
 			}
 		}
 	}

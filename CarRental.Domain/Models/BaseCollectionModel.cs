@@ -26,6 +26,8 @@ namespace CarRental.Domain.Models
 		/// Creates a new collection with initial items.
 		/// </summary>
 		/// <param name="items"></param>
+		/// <param name="startIndex"></param>
+		/// <param name="spliceCount"></param>
 		protected BaseCollectionModel(IEnumerable<T> items, int startIndex, int spliceCount)
 		{
 			this.SetItems(items, startIndex, spliceCount);
@@ -57,6 +59,8 @@ namespace CarRental.Domain.Models
 		/// Helper to set the items and counts in the collection.
 		/// </summary>
 		/// <param name="items">Items to set.</param>
+		/// <param name="startIndex"></param>
+		/// <param name="spliceCount"></param>
 		public void SetItems(IEnumerable<T> items, int startIndex, int spliceCount)
 		{
 			if(spliceCount > 0)

@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\CarRental.Domain.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +58,7 @@
     <Compile Include="Parameters\RezervationModificationParameters.cs" />
     <Compile Include="Parameters\RezervationCreationParameters.cs" />
     <Compile Include="Parameters\RezervationBrowsingParams.cs" />
+    <Compile Include="Parameters\RezervationCancellationParams .cs" />
     <Compile Include="Parameters\RezervationRetrievalParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

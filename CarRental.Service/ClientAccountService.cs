@@ -36,7 +36,7 @@ namespace CarRental.Service
 		{			
 			if(clientId < 1)
 			{
-				throw new InvalidOperationException("Invalid parameter");
+				return null;
 			}
 
 			var dbClientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == clientId);
