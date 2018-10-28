@@ -132,6 +132,10 @@
     <Compile Include="Migrations\20181027143054_InitialCreate.designer.cs">
       <DependentUpon>20181027143054_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20181028210529_ChangedNullableFieldsInRezervation.cs" />
+    <Compile Include="Migrations\20181028210529_ChangedNullableFieldsInRezervation.designer.cs">
+      <DependentUpon>20181028210529_ChangedNullableFieldsInRezervation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\CarRentalDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
