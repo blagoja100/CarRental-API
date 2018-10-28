@@ -9,7 +9,7 @@ namespace CarRental.Domain.Parameters
 	/// <summary>
 	/// Rezervation retrieval parameters.
 	/// </summary>
-	public class RezervationBrowsingParams
+	public class RezervationBrowsingParams : BaseCollectionRetrievalParams
 	{
 		/// <summary>
 		/// Retrieve rezervations for Client with name.

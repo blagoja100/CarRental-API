@@ -110,5 +110,52 @@ namespace CarRental.Tests.ServiceTests
 				Assert.IsTrue(dbRezervation.IsPickedUp);
 			}
 		}
+
+		[TestMethod]
+		public void ReturnCarTest()
+		{
+			using (var context = new CarRentalDbContext(this.dbContextOptions))
+			{
+				var dbRezervation = context.Rezervations.First(x => x.IsPickedUp && !x.IsReturned);
+
+				var clientAccountService = new ClientAccountService(context);
+				var rezervationService = new RezervationService(context, clientAccountService);
+
+				var isReturned = rezervationService.ReturnCar(dbRezervation.RezervationId);
+
+				Assert.IsTrue(isReturned);
+
+				dbRezervation = context.Rezervations.Single(x => x.RezervationId == dbRezervation.RezervationId);
+				Assert.IsTrue(dbRezervation.IsReturned);
+			}
+		}
+
+		[TestMethod]
+		public void CancelRezervationTest()
+		{
+			using (var context = new CarRentalDbContext(this.dbContextOptions))
+			{
+				var dbRezervation = context.Rezervations.First(x => !x.IsPickedUp && !x.IsReturned);
+
+				var clientAccountService = new ClientAccountService(context);
+				var rezervationService = new RezervationService(context, clientAccountService);
+
+				var cancelationFeeRate = 2.00m;
+
+				var isCancelled = rezervationService.CancelRezervation(dbRezervation.RezervationId, cancelationFeeRate);
+
+				Assert.IsTrue(isCancelled);
+
+				var carType = CarTypes.GetCarType((CarTypeEnum)dbRezervation.CarType);
+
+				// Test the actual calculations in the car type class.
+				var cancellationFee = carType.CancellationFee * cancelationFeeRate;				
+
+				dbRezervation = context.Rezervations.Single(x => x.RezervationId == dbRezervation.RezervationId);
+				Assert.IsTrue(dbRezervation.IsCancelled);
+				Assert.AreEqual(dbRezervation.CancellationFee, cancellationFee);
+				Assert.AreEqual(dbRezervation.CancelationFeeRate, cancelationFeeRate);
+			}
+		}
 	}
 }

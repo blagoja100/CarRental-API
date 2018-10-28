@@ -50,6 +50,6 @@ namespace CarRental.Service.Interfaces
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		ICollection<RezervationModel> FindRezervations(RezervationBrowsingParams parameters);
+		RezervationCollectionModel FindRezervations(RezervationBrowsingParams parameters);
 	}
 }

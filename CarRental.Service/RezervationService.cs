@@ -124,9 +124,9 @@ namespace CarRental.Service
 				return false;
 			}
 
-			if(dbRezervation.IsPickedUp && !dbRezervation.IsCancelled)
+			if(!dbRezervation.IsPickedUp || dbRezervation.IsCancelled)
 			{
-				throw new InvalidOperationException("Error returning car.");
+				return false;
 			}
 
 			dbRezervation.IsReturned = true;
@@ -191,7 +191,7 @@ namespace CarRental.Service
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public ICollection<RezervationModel> FindRezervations(RezervationBrowsingParams parameters)
+		public RezervationCollectionModel FindRezervations(RezervationBrowsingParams parameters)
 		{
 			if(parameters == null)
 			{
@@ -246,7 +246,7 @@ namespace CarRental.Service
 				dbRezervations = dbRezervations.Where(x => x.IsCancelled);
 			}
 
-			return dbRezervations.ToList().Select(x => x.ToModel()).ToList();
+			return new RezervationCollectionModel(dbRezervations.ToList().Select(x => x.ToModel()).ToList(), parameters.StartIndex, parameters.MaxItems);			
 		}
 	}
 }

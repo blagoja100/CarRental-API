@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,9 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Models\BaseCollectionModel.cs" />
     <Compile Include="Models\ClientAccountModel.cs" />
     <Compile Include="Models\ClientBalanceModel.cs" />
+    <Compile Include="Models\RezervationCollectionModel.cs" />
     <Compile Include="Models\RezervationModel.cs" />
+    <Compile Include="Parameters\BaseCollectionRetrievalParams.cs" />
     <Compile Include="Parameters\ClientAccountBaseParams.cs" />
     <Compile Include="Parameters\ClientAccountModificationParams.cs" />
     <Compile Include="Parameters\ClientAccountCreationParams.cs" />
