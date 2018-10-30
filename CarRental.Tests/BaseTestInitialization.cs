@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CarRental.Data;
+using CarRental.Data.Entities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using CarRental.Data.Entities;
-using CarRental.Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 
 namespace CarRental.Tests
@@ -33,7 +33,7 @@ namespace CarRental.Tests
 		public abstract void InitializeTest();
 
 		public void SetupClientService()
-		{		
+		{
 			// Add data to the database.
 			using (var context = new CarRentalDbContext(this.dbContextOptions))
 			{
@@ -70,7 +70,7 @@ namespace CarRental.Tests
 					CarPlateNumber = "CA1234AC",
 					CarType = 2,
 					RentaltFee = 1152.00m,
-					DepositFee = 138.24m,					
+					DepositFee = 138.24m,
 					ClientId = client1.ClientId,
 				});
 
@@ -85,7 +85,6 @@ namespace CarRental.Tests
 					IsPickedUp = true,
 					IsReturned = true,
 					ClientId = client1.ClientId,
-
 				});
 
 				context.Rezervations.Add(new Rezervation
@@ -98,7 +97,6 @@ namespace CarRental.Tests
 					DepositFee = 2.5m,
 					IsPickedUp = true,
 					ClientId = client2.ClientId,
-
 				});
 
 				context.Rezervations.Add(new Rezervation
@@ -126,7 +124,6 @@ namespace CarRental.Tests
 					IsPickedUp = true,
 					IsReturned = true,
 					ClientId = client1.ClientId,
-
 				});
 
 				context.SaveChanges();

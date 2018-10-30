@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using CarRental.Data;
+﻿using CarRental.Data;
 using CarRental.Domain.Parameters;
 using CarRental.Service;
 using CarRental.Service.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Linq;
 using static CarRental.Domain.Constants;
 
 namespace CarRental.Tests.ServiceTests
@@ -17,6 +17,7 @@ namespace CarRental.Tests.ServiceTests
 		{
 			this.SetupRezervationService();
 		}
+
 		[TestMethod]
 		public void CreateRezervationTest()
 		{
@@ -84,16 +85,14 @@ namespace CarRental.Tests.ServiceTests
 					};
 					rezervationModel = rezervationService.CreateBooking(createRezervationParametersNoClient);
 					Assert.Fail();
-
 				}
 				catch (InvalidParameterException)
 				{
-				}		
+				}
 				catch
 				{
 					Assert.Fail();
 				}
-
 			}
 		}
 
@@ -243,7 +242,7 @@ namespace CarRental.Tests.ServiceTests
 		public void GetClientAccountBalaceTest()
 		{
 			using (var context = new CarRentalDbContext(this.dbContextOptions))
-			{				
+			{
 				var clientAccountService = new ClientAccountService(context);
 				var rezervationService = new RezervationService(context, clientAccountService);
 

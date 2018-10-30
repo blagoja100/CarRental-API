@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CarRental.Data;
+﻿using CarRental.Data;
 using CarRental.Domain.Parameters;
 using CarRental.Service;
 using CarRental.Service.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace CarRental.Tests.ServiceTests
 {
@@ -22,7 +20,7 @@ namespace CarRental.Tests.ServiceTests
 		public void AddClientAccountTest()
 		{
 			using (var context = new CarRentalDbContext(this.dbContextOptions))
-			{				
+			{
 				var service = new ClientAccountService(context);
 				ClientAccountCreationParams parameters = new ClientAccountCreationParams
 				{
@@ -32,7 +30,7 @@ namespace CarRental.Tests.ServiceTests
 				};
 
 				var clientAccountModel = service.Add(parameters);
-				
+
 				Assert.AreEqual(parameters.Email, clientAccountModel.Email);
 				Assert.AreEqual(parameters.Phone, clientAccountModel.Phone);
 				Assert.AreEqual(parameters.FullName, clientAccountModel.FullName);
@@ -123,7 +121,7 @@ namespace CarRental.Tests.ServiceTests
 
 		[TestMethod]
 		public void GetClientAccountTest()
-		{			
+		{
 			using (var context = new CarRentalDbContext(this.dbContextOptions))
 			{
 				var clientAccount = context.ClientAccounts.First();

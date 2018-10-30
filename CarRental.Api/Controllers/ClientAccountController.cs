@@ -2,11 +2,6 @@
 using CarRental.Domain.Models;
 using CarRental.Domain.Parameters;
 using CarRental.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace CarRental.Api.Controllers
@@ -20,7 +15,7 @@ namespace CarRental.Api.Controllers
 	[InvalidParametersException]
 	[NotFoundException]
 	public class ClientAccountController : ApiController
-    {
+	{
 		private readonly IClientAccountService clientAccountService;
 
 		/// <summary>
@@ -64,7 +59,7 @@ namespace CarRental.Api.Controllers
 		/// <param name="parameters">Client account retrieval parameters.</param>
 		/// <returns>Client account.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
-		[HttpPost]		
+		[HttpPost]
 		public ClientAccountModel GetClientAccount(ClientAccountRetrievalParams parameters) => this.clientAccountService.Get(parameters.ClientId);
 
 		/// <summary>

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRental.Service.Exceptions
 {
@@ -16,7 +12,7 @@ namespace CarRental.Service.Exceptions
 		/// </summary>
 		/// <param name="message"></param>
 		public InvalidParameterException(string message) : base(message)
-		{			
+		{
 		}
 
 		public override string Message => $"Invalid parameter: {base.Message}";

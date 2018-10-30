@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static CarRental.Domain.Constants;
 
 namespace CarRental.Domain.Models
@@ -53,7 +49,7 @@ namespace CarRental.Domain.Models
 		public decimal? CancellationFee { get; set; }
 
 		/// <summary>
-		/// Rate under which the cancelation fee is 
+		/// Rate under which the cancelation fee is
 		/// </summary>
 		public decimal? CancelationFeeRate { get; set; }
 

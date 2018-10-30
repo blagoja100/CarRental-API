@@ -1,10 +1,6 @@
 ﻿using log4net;
 using Swashbuckle.Application;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Hosting;
@@ -15,15 +11,15 @@ using System.Web.Http.Results;
 namespace CarRental.Api
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-    public static class WebApiConfig
-    {
+	public static class WebApiConfig
+	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="config"></param>
-        public static void Register(HttpConfiguration config)
+		public static void Register(HttpConfiguration config)
 		{
 			// Web API configuration and services
 
@@ -33,6 +29,7 @@ namespace CarRental.Api
 		}
 
 		#region Private Conguration Methods
+
 		private static void ConfigureRoutes(HttpConfiguration config)
 		{
 			config.MapHttpAttributeRoutes();
@@ -43,7 +40,6 @@ namespace CarRental.Api
 			  defaults: null,
 			  constraints: null,
 			  handler: new RedirectHandler((message => message.RequestUri.ToString()), "swagger"));
-
 
 			config.Routes.MapHttpRoute(
 				name: "DefaultApi",
@@ -70,9 +66,11 @@ namespace CarRental.Api
 			log4net.GlobalContext.Properties["LogFileName"] = logFilePath;
 			log4net.Config.XmlConfigurator.Configure();
 		}
-		#endregion
+
+		#endregion Private Conguration Methods
 
 		#region UnhandledEexception Handling
+
 		/// <summary>
 		/// Entity framework exception handler filter.
 		/// </summary>
@@ -86,7 +84,7 @@ namespace CarRental.Api
 
 			/// <inheritdoc />
 			public override void Handle(ExceptionHandlerContext context)
-			{			
+			{
 				ExceptionContext exceptionContext = context.ExceptionContext;
 
 				HttpRequestMessage request = exceptionContext.Request;
@@ -118,7 +116,7 @@ namespace CarRental.Api
 					return;
 				}
 
-				logger.Error(context.Exception);				
+				logger.Error(context.Exception);
 				base.Log(context);
 			}
 
@@ -128,6 +126,7 @@ namespace CarRental.Api
 				return true;
 			}
 		}
-		#endregion
+
+		#endregion UnhandledEexception Handling
 	}
 }

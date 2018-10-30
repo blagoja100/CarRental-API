@@ -1,23 +1,19 @@
-﻿using System;
-using System.Configuration;
-using System.Reflection;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Autofac.Integration.WebApi;
 using CarRental.Data;
 using CarRental.Service.Interfaces;
-using Microsoft.Owin;
 using Owin;
+using System.Reflection;
 
 namespace CarRental.Api
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class Startup
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="app"></param>
 		public void Configuration(IAppBuilder app)

@@ -1,7 +1,5 @@
 ﻿using CarRental.Data.Entities;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Configuration;
 
 namespace CarRental.Data

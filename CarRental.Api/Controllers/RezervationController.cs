@@ -2,13 +2,9 @@
 using CarRental.Domain.Models;
 using CarRental.Domain.Parameters;
 using CarRental.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using static CarRental.Domain.Constants;
 
 namespace CarRental.Api.Controllers
 {
@@ -21,7 +17,7 @@ namespace CarRental.Api.Controllers
 	[InvalidParametersException]
 	[NotFoundException]
 	public class RezervationController : ApiController
-    {
+	{
 		private readonly IRezervationService rezervationService;
 
 		/// <summary>
@@ -40,20 +36,20 @@ namespace CarRental.Api.Controllers
 		///	Creates new reservation with following information. The client account information is mandatory.
 		/// You can provide a client account identifier, in which case the rezervation will be added to an existing account.
 		/// Or, you can provide a new client account information, in which case the client account will be created automatically.
-		/// 
-		/// When creating a reservation a you must specify a car type. 
+		///
+		/// When creating a reservation a you must specify a car type.
 		/// The api supports the following car types:
-		///		- Standard: 
-		///			RentalRateFee = 10.00, 
-		///			CancellationFee = 5.00, 
+		///		- Standard:
+		///			RentalRateFee = 10.00,
+		///			CancellationFee = 5.00,
 		///			DepositFeePercentage = 10%
 		///		- Family:
-		///			RentalRateFee = 12.00, 
-		///			CancellationFee = 7.00, 
+		///			RentalRateFee = 12.00,
+		///			CancellationFee = 7.00,
 		///			DepositFeePercentage = 12%
 		///		- Prestiege:
-		///			RentalRateFee = 50.00, 
-		///			CancellationFee = 25.00, 
+		///			RentalRateFee = 50.00,
+		///			CancellationFee = 25.00,
 		///			DepositFeePercentage = 70%
 		/// </remarks>
 		/// <param name="parameters">Reservation creation parameters.</param>
@@ -71,7 +67,7 @@ namespace CarRental.Api.Controllers
 		/// <param name="parameters">Reservation retireval parameters. The reservation identifier must be provided.</param>
 		/// <returns>TRUE if the reservation is marked as picked up successfully.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
-		[HttpPost]			
+		[HttpPost]
 		public bool PickUpCar(RezervationRetrievalParams parameters) => this.rezervationService.PickUpCar(parameters.RezervationId);
 
 		/// <summary>
@@ -92,7 +88,7 @@ namespace CarRental.Api.Controllers
 		/// </summary>
 		/// <remarks>
 		///	Marks the reservation as cancelled. The cancelation fee is calculated.
-		///	In order to for the cancelation fee to be configurable for each car type a cancelation fee rate can be provided to adjust the cancellation fee. 
+		///	In order to for the cancelation fee to be configurable for each car type a cancelation fee rate can be provided to adjust the cancellation fee.
 		/// </remarks>
 		/// <param name="parameters">Reservation retireval parameters. The reservation identifier must be provided.</param>
 		/// <returns>TRUE if the reservation is marked as cancelled successfully.</returns>
@@ -109,7 +105,7 @@ namespace CarRental.Api.Controllers
 		}
 
 		/// <summary>
-		/// Gets a list of reservations filtered by specified fields. 
+		/// Gets a list of reservations filtered by specified fields.
 		/// </summary>
 		/// <remarks>
 		///	Allows to fetch reservation according to specified options:
@@ -117,13 +113,13 @@ namespace CarRental.Api.Controllers
 		///		- Picked-up date-time from
 		///		- Picked-up date-time to
 		///		- Client full name or email or phone number
-		///		
+		///
 		///	The collection can be paged by providing a startIndex and maximum number of items to retrieve.
 		/// </remarks>
 		/// <param name="parameters">Reservation browsing parameters. If a parameter value is not specified, the fields is not included in the search.</param>
 		/// <returns>Collection of reservations.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
-		[HttpPost]		
+		[HttpPost]
 		public RezervationCollectionModel GetAllRezervations(RezervationBrowsingParams parameters)
 		{
 			if (parameters == null)

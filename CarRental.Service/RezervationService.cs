@@ -1,6 +1,5 @@
 ﻿using CarRental.Data;
 using CarRental.Data.Entities;
-using CarRental.Domain;
 using CarRental.Domain.Models;
 using CarRental.Domain.Parameters;
 using CarRental.Service.Exceptions;
@@ -8,10 +7,7 @@ using CarRental.Service.Interfaces;
 using CarRental.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static CarRental.Domain.Constants;
 
 namespace CarRental.Service
@@ -76,6 +72,7 @@ namespace CarRental.Service
 
 			return dbRezervation.ToModel(clientAccount);
 		}
+
 		/// <summary>
 		/// Sets the flag which determines if the car is picked up.
 		/// </summary>
@@ -89,7 +86,7 @@ namespace CarRental.Service
 			this.dbContext.SaveChanges();
 
 			return true;
-		}		
+		}
 
 		/// <summary>
 		/// Sets the flag which indicates of the car is return and set rental fee if needed to be calculated.
@@ -129,7 +126,7 @@ namespace CarRental.Service
 		{
 			var dbRezervation = this.GetRezervation(rezervationId);
 
-			if(dbRezervation.IsReturned)
+			if (dbRezervation.IsReturned)
 			{
 				throw new InvalidOperationException("Car already returned.");
 			}
@@ -141,7 +138,7 @@ namespace CarRental.Service
 			// cancelation fee cannot be bigger than the rental fee.
 			dbRezervation.CancellationFee = cancelationFee > dbRezervation.RentaltFee ? dbRezervation.RentaltFee : cancelationFee;
 			dbRezervation.CancelationFeeRate = cancelationFeeRate;
-			
+
 			// we set this to 0 since the car is not rented.
 			dbRezervation.RentaltFee = 0.0m;
 			dbRezervation.DepositFee = 0.0m;
@@ -162,14 +159,14 @@ namespace CarRental.Service
 		/// <returns></returns>
 		public RezervationCollectionModel FindRezervations(RezervationBrowsingParams parameters)
 		{
-			if(parameters == null)
+			if (parameters == null)
 			{
 				throw new InvalidParameterException(nameof(parameters));
 			}
 
 			var dbRezervations = this.dbContext.Rezervations.AsQueryable();
 
-			if(!string.IsNullOrWhiteSpace(parameters.ClientEmail))
+			if (!string.IsNullOrWhiteSpace(parameters.ClientEmail))
 			{
 				dbRezervations = dbRezervations.Include(x => x.ClientAccount).Where(x => x.ClientAccount.Email == parameters.ClientEmail);
 			}
@@ -184,10 +181,9 @@ namespace CarRental.Service
 				dbRezervations = dbRezervations.Include(x => x.ClientAccount).Where(x => x.ClientAccount.Phone == parameters.ClientPhone);
 			}
 
-			if(parameters.PickUpDateFrom.HasValue)
+			if (parameters.PickUpDateFrom.HasValue)
 			{
 				dbRezervations = dbRezervations.Where(x => x.PickUpDate >= parameters.PickUpDateFrom);
-
 			}
 
 			if (parameters.PickUpDateTo.HasValue)
@@ -195,7 +191,7 @@ namespace CarRental.Service
 				dbRezervations = dbRezervations.Where(x => x.PickUpDate <= parameters.PickUpDateTo);
 			}
 
-			if(parameters.IsBooked)
+			if (parameters.IsBooked)
 			{
 				dbRezervations = dbRezervations.Where(x => !x.IsCancelled && !x.IsPickedUp && !x.IsReturned);
 			}
@@ -220,7 +216,7 @@ namespace CarRental.Service
 
 		private void ValidateBookingParameters(RezervationCreationParameters parameters)
 		{
-			if(parameters == null)
+			if (parameters == null)
 			{
 				throw new InvalidParameterException("Parameters not provided.");
 			}

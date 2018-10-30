@@ -1,10 +1,5 @@
 ﻿using CarRental.Data.Entities;
 using CarRental.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRental.Service.Mappers
 {
@@ -28,7 +23,5 @@ namespace CarRental.Service.Mappers
 				Phone = dbClientAccount.Phone,
 			};
 		}
-
-
 	}
 }

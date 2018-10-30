@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CarRental.Domain.Parameters
+﻿namespace CarRental.Domain.Parameters
 {
 	/// <summary>
 	/// Client account creation parameters used in the API.
@@ -16,7 +10,6 @@ namespace CarRental.Domain.Parameters
 		/// </summary>
 		public ClientAccountCreationParams()
 		{
-
 		}
 	}
 }

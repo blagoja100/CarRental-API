@@ -5,19 +5,15 @@ using CarRental.Domain.Parameters;
 using CarRental.Service.Exceptions;
 using CarRental.Service.Interfaces;
 using CarRental.Service.Mappers;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRental.Service
 {
 	/// <summary>
 	/// Handles the CRUD opperations on the Client account.
 	/// </summary>
-    public class ClientAccountService : IClientAccountService
-    {
+	public class ClientAccountService : IClientAccountService
+	{
 		private readonly CarRentalDbContext dbContext;
 
 		/// <summary>
@@ -28,6 +24,7 @@ namespace CarRental.Service
 		{
 			this.dbContext = context;
 		}
+
 		/// <summary>
 		/// Get a client account for the specified identifier.
 		/// </summary>
@@ -42,7 +39,7 @@ namespace CarRental.Service
 
 			var dbClientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == clientId);
 
-			if(dbClientAccount == null)
+			if (dbClientAccount == null)
 			{
 				throw new NotFoundException("Client account not found.");
 			}
@@ -71,6 +68,7 @@ namespace CarRental.Service
 
 			return dbClientAccount.ToModel();
 		}
+
 		/// <summary>
 		/// Updates a client account.
 		/// </summary>
@@ -81,7 +79,7 @@ namespace CarRental.Service
 			this.ValidateParameters(parameters);
 
 			var dbClientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == parameters.ClientId);
-			if(dbClientAccount == null)
+			if (dbClientAccount == null)
 			{
 				throw new NotFoundException("Client account not found.");
 			}
@@ -89,19 +87,19 @@ namespace CarRental.Service
 			dbClientAccount.Email = parameters.Email;
 			dbClientAccount.FullName = parameters.FullName;
 			dbClientAccount.Phone = parameters.Phone;
-								
+
 			this.dbContext.SaveChanges();
 
-			return dbClientAccount.ToModel();			
+			return dbClientAccount.ToModel();
 		}
 
 		/// <summary>
-		/// Calculates total fees. 
+		/// Calculates total fees.
 		/// </summary>
 		/// <remarks>
 		///		Calculates Rental rate fee, Cancellation fee from all reservations for specified client.
-		///		
-		///		NOTE: The calculation includes only the rental fees that come from rezervations that are completed or cancelled. 
+		///
+		///		NOTE: The calculation includes only the rental fees that come from rezervations that are completed or cancelled.
 		/// </remarks>
 		/// <param name="clientId">Client identifier.</param>
 		/// <returns>Client balance model.</returns>
@@ -125,7 +123,7 @@ namespace CarRental.Service
 
 			var dbClientRezervations = this.dbContext.Rezervations.Where(x => x.ClientId == clientId).ToList();
 
-			if(!dbClientRezervations.Any())
+			if (!dbClientRezervations.Any())
 			{
 				return clientBalanceModel;
 			}

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static CarRental.Domain.Constants;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CarRental.Domain.Parameters
 {
@@ -20,7 +14,7 @@ namespace CarRental.Domain.Parameters
 		public int RezervationId { get; set; }
 
 		/// <summary>
-		/// Rate under which the cancelation fee is 
+		/// Rate under which the cancelation fee is
 		/// </summary>
 		public decimal? CancelationFeeRate { get; set; }
 

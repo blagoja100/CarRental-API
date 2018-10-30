@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRental.Domain.Parameters
 {
@@ -15,10 +11,12 @@ namespace CarRental.Domain.Parameters
 		/// Retrieve rezervations for Client with name.
 		/// </summary>
 		public string ClientFullName { get; set; }
+
 		/// <summary>
 		/// Retrieve rezervations for Client with email.
 		/// </summary>
 		public string ClientEmail { get; set; }
+
 		/// <summary>
 		/// Retrieve rezervations for Client with phone number.
 		/// </summary>

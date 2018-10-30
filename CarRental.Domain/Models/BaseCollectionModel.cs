@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRental.Domain.Models
 {
@@ -49,7 +46,7 @@ namespace CarRental.Domain.Models
 			this.Items = items == null
 				? new T[0]
 				: items.ToArray();
-			
+
 			this.StartIndex = 0;
 			this.Count = this.Items.LongLength;
 			this.TotalCount = this.Count;
@@ -63,7 +60,7 @@ namespace CarRental.Domain.Models
 		/// <param name="spliceCount"></param>
 		public void SetItems(IEnumerable<T> items, int startIndex, int spliceCount)
 		{
-			if(spliceCount > 0)
+			if (spliceCount > 0)
 			{
 				items = items.Skip(startIndex * spliceCount).Take(spliceCount);
 			}

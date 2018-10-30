@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Data.Common;
+﻿using System;
+using System.Collections.Generic;
 using static CarRental.Domain.Constants;
-using System;
 
 namespace CarRental.Service
 {

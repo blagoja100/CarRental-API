@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CarRental.Domain.Models
+﻿namespace CarRental.Domain.Models
 {
 	/// <summary>
 	/// Hold information on client's total fees (Rental rate fee, Cancellation fee,  Deposit fee) from all reservations for specified client.
