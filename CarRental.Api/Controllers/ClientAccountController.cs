@@ -1,4 +1,5 @@
-﻿using CarRental.Domain.Models;
+﻿using CarRental.Api.Attributes;
+using CarRental.Domain.Models;
 using CarRental.Domain.Parameters;
 using CarRental.Service.Interfaces;
 using System;
@@ -16,6 +17,8 @@ namespace CarRental.Api.Controllers
 	/// <remarks>
 	///  Contains endpoints for the creation, modification and retrieval of client accounts as weel as the endpoint for the client account balance retrieval.
 	/// </remarks>
+	[InvalidParametersException]
+	[NotFoundException]
 	public class ClientAccountController : ApiController
     {
 		private readonly IClientAccountService clientAccountService;
@@ -24,10 +27,7 @@ namespace CarRental.Api.Controllers
 		/// Creates new instance of the client account controller.
 		/// </summary>
 		/// <param name="clientAccountService"></param>
-		public ClientAccountController(IClientAccountService clientAccountService)
-		{
-			this.clientAccountService = clientAccountService;
-		}
+		public ClientAccountController(IClientAccountService clientAccountService) => this.clientAccountService = clientAccountService;
 
 		/// <summary>
 		/// Adds a client account.
@@ -39,15 +39,7 @@ namespace CarRental.Api.Controllers
 		/// <returns>Client account.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
 		[HttpPost]
-		public ClientAccountModel AddClientAccount(ClientAccountCreationParams parameters)
-		{
-			if(parameters == null || string.IsNullOrWhiteSpace(parameters.FullName) || string.IsNullOrWhiteSpace(parameters.Email) || string.IsNullOrWhiteSpace(parameters.Phone))
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Invalid parameters." });
-			}
-
-			return this.clientAccountService.Add(parameters);
-		}
+		public ClientAccountModel AddClientAccount(ClientAccountCreationParams parameters) => this.clientAccountService.Add(parameters);
 
 		/// <summary>
 		/// Updates the client account.
@@ -60,15 +52,7 @@ namespace CarRental.Api.Controllers
 		/// <returns>Client account.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
 		[HttpPost]
-		public ClientAccountModel UpdateClientAccount(ClientAccountModificationParams parameters)
-		{
-			if (parameters == null || parameters.ClientId < 1 || string.IsNullOrWhiteSpace(parameters.FullName) || string.IsNullOrWhiteSpace(parameters.Email) || string.IsNullOrWhiteSpace(parameters.Phone))
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Invalid parameters." });
-			}
-
-			return this.clientAccountService.Update(parameters);
-		}
+		public ClientAccountModel UpdateClientAccount(ClientAccountModificationParams parameters) => this.clientAccountService.Update(parameters);
 
 		/// <summary>
 		/// Gets the client account.
@@ -80,16 +64,8 @@ namespace CarRental.Api.Controllers
 		/// <param name="parameters">Client account retrieval parameters.</param>
 		/// <returns>Client account.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
-		[HttpPost]
-		public ClientAccountModel GetClientAccount(ClientAccountRetrievalParams parameters)
-		{
-			if (parameters == null || parameters.ClientId < 1)
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Invalid parameters." });
-			}
-
-			return this.clientAccountService.Get(parameters.ClientId);
-		}
+		[HttpPost]		
+		public ClientAccountModel GetClientAccount(ClientAccountRetrievalParams parameters) => this.clientAccountService.Get(parameters.ClientId);
 
 		/// <summary>
 		/// Gets the client account ballance.
@@ -101,14 +77,6 @@ namespace CarRental.Api.Controllers
 		/// <returns>Client account.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
 		[HttpPost]
-		public ClientBalanceModel GetClientBalance(ClientAccountRetrievalParams parameters)
-		{
-			if (parameters == null || parameters.ClientId < 1)
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Invalid parameters." });
-			}
-
-			return this.clientAccountService.GetClientAccountBalance(parameters.ClientId);
-		}
+		public ClientBalanceModel GetClientBalance(ClientAccountRetrievalParams parameters) => this.clientAccountService.GetClientAccountBalance(parameters.ClientId);
 	}
 }

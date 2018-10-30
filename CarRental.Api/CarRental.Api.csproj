@@ -194,6 +194,9 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\InvalidOperationExceptionAttribute.cs" />
+    <Compile Include="Attributes\NotFoundExceptionAttribute.cs" />
+    <Compile Include="Attributes\InvalidParametersExceptionAttribute.cs" />
     <Compile Include="Controllers\ClientAccountController.cs" />
     <Compile Include="Controllers\RezervationController.cs" />
     <Compile Include="Global.asax.cs">

@@ -1,4 +1,5 @@
-﻿using CarRental.Domain.Models;
+﻿using CarRental.Api.Attributes;
+using CarRental.Domain.Models;
 using CarRental.Domain.Parameters;
 using CarRental.Service.Interfaces;
 using System;
@@ -17,6 +18,8 @@ namespace CarRental.Api.Controllers
 	/// <remarks>
 	/// Contains endpoins for the creation of rezervation, car pick-up and return, reservations cancelations and rezervation browsing.
 	/// </remarks>
+	[InvalidParametersException]
+	[NotFoundException]
 	public class RezervationController : ApiController
     {
 		private readonly IRezervationService rezervationService;
@@ -57,35 +60,7 @@ namespace CarRental.Api.Controllers
 		/// <returns>Reservation information.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
 		[HttpPost]
-		public RezervationModel BookRezervation(RezervationCreationParameters parameters)
-		{
-			if (!Enum.IsDefined(typeof(CarTypeEnum), parameters.CarType))
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Car type is not valid." });
-			}
-
-			if (string.IsNullOrWhiteSpace(parameters.CarPlateNumber))				
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Car plate number is not provided." });
-			}
-
-			if (parameters.PickUpDate < DateTime.Now)				
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Pick-up date is invalid." });
-			}
-
-			if (parameters.ReturnDate < parameters.PickUpDate)
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Return date is invalid." });
-			}
-
-			if (parameters.ClientAccount == null && parameters.ClientId < 1)
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Client not provided." });
-			}
-
-			return this.rezervationService.CreateBooking(parameters);
-		}
+		public RezervationModel BookRezervation(RezervationCreationParameters parameters) => this.rezervationService.CreateBooking(parameters);
 
 		/// <summary>
 		/// Marks the reservation as picked up.
@@ -96,16 +71,8 @@ namespace CarRental.Api.Controllers
 		/// <param name="parameters">Reservation retireval parameters. The reservation identifier must be provided.</param>
 		/// <returns>TRUE if the reservation is marked as picked up successfully.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
-		[HttpPost]
-		public bool PickUpCar(RezervationRetrievalParams parameters)
-		{
-			if (parameters == null)
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Invalid parameters." });
-			}
-
-			return this.rezervationService.PickUpCar(parameters.RezervationId);
-		}
+		[HttpPost]			
+		public bool PickUpCar(RezervationRetrievalParams parameters) => this.rezervationService.PickUpCar(parameters.RezervationId);
 
 		/// <summary>
 		/// Marks the reservation as returned up.
@@ -118,15 +85,7 @@ namespace CarRental.Api.Controllers
 		/// <returns>TRUE if the reservation is marked as returned successfully.</returns>
 		/// <response code="400">In case of invalid parameters.</response>
 		[HttpPost]
-		public bool ReturnCar(RezervationRetrievalParams parameters)
-		{
-			if (parameters == null)
-			{
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "Invalid parameters." });
-			}
-
-			return this.rezervationService.ReturnCar(parameters.RezervationId);
-		}
+		public bool ReturnCar(RezervationRetrievalParams parameters) => this.rezervationService.ReturnCar(parameters.RezervationId);
 
 		/// <summary>
 		/// Cancels the reservation.

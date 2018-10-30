@@ -2,6 +2,7 @@
 using CarRental.Data.Entities;
 using CarRental.Domain.Models;
 using CarRental.Domain.Parameters;
+using CarRental.Service.Exceptions;
 using CarRental.Service.Interfaces;
 using CarRental.Service.Mappers;
 using System;
@@ -33,17 +34,17 @@ namespace CarRental.Service
 		/// <param name="clientId"></param>
 		/// <returns></returns>
 		public ClientAccountModel Get(int clientId)
-		{			
-			if(clientId < 1)
+		{
+			if (clientId < 1)
 			{
-				return null;
+				throw new InvalidParameterException(nameof(clientId));
 			}
 
 			var dbClientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == clientId);
 
 			if(dbClientAccount == null)
 			{
-				return null;
+				throw new NotFoundException("Client account not found.");
 			}
 
 			return dbClientAccount.ToModel();
@@ -56,15 +57,7 @@ namespace CarRental.Service
 		/// <returns>Client account model.</returns>
 		public ClientAccountModel Add(ClientAccountCreationParams parameters)
 		{
-			if (parameters == null)
-			{
-				throw new ArgumentNullException(nameof(parameters));
-			}
-
-			if (string.IsNullOrWhiteSpace(parameters.FullName) || string.IsNullOrWhiteSpace(parameters.Email) || string.IsNullOrWhiteSpace(parameters.Phone))
-			{
-				throw new InvalidOperationException("Invalid parameters.");
-			}
+			this.ValidateParameters(parameters);
 
 			var dbClientAccount = new ClientAccount
 			{
@@ -78,7 +71,6 @@ namespace CarRental.Service
 
 			return dbClientAccount.ToModel();
 		}
-
 		/// <summary>
 		/// Updates a client account.
 		/// </summary>
@@ -86,15 +78,7 @@ namespace CarRental.Service
 		/// <returns>Client account model.</returns>
 		public ClientAccountModel Update(ClientAccountModificationParams parameters)
 		{
-			if (parameters == null)
-			{
-				throw new ArgumentNullException(nameof(parameters));
-			}
-
-			if (parameters.ClientId < 1 || string.IsNullOrWhiteSpace(parameters.FullName) || string.IsNullOrWhiteSpace(parameters.Email) || string.IsNullOrWhiteSpace(parameters.Phone))
-			{
-				throw new InvalidOperationException("Invalid parameters.");
-			}
+			this.ValidateParameters(parameters);
 
 			var dbClientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == parameters.ClientId);
 			if(dbClientAccount == null)
@@ -125,13 +109,13 @@ namespace CarRental.Service
 		{
 			if (clientId < 1)
 			{
-				throw new InvalidOperationException("Invalid parameters.");
+				throw new InvalidParameterException(nameof(clientId));
 			}
 
 			var dbClientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == clientId);
 			if (dbClientAccount == null)
 			{
-				throw new InvalidOperationException("Client account not found.");
+				throw new NotFoundException("Client account not found.");
 			}
 
 			var clientBalanceModel = new ClientBalanceModel
@@ -151,6 +135,29 @@ namespace CarRental.Service
 			clientBalanceModel.TotalFees = clientBalanceModel.TotalCancellationFee + clientBalanceModel.TotalRentalFee;
 
 			return clientBalanceModel;
+		}
+
+		private void ValidateParameters(ClientAccountBaseParams parameters)
+		{
+			if (parameters == null)
+			{
+				throw new InvalidParameterException("Parameters provided.");
+			}
+
+			if (string.IsNullOrWhiteSpace(parameters.FullName))
+			{
+				throw new InvalidParameterException(nameof(parameters.FullName));
+			}
+
+			if (string.IsNullOrWhiteSpace(parameters.Email))
+			{
+				throw new InvalidParameterException(nameof(parameters.Email));
+			}
+
+			if (string.IsNullOrWhiteSpace(parameters.Email))
+			{
+				throw new InvalidParameterException(nameof(parameters.Email));
+			}
 		}
 	}
 }

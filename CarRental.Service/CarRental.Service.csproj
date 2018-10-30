@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="CarTypes.cs" />
     <Compile Include="ClientAccountService.cs" />
+    <Compile Include="Exceptions\InvalidParameterException.cs" />
+    <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Interfaces\IClientAccountService.cs" />
     <Compile Include="Interfaces\IRezervationService.cs" />
     <Compile Include="Mappers\ClientAccountMapper.cs" />

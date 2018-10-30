@@ -3,6 +3,7 @@ using CarRental.Data.Entities;
 using CarRental.Domain;
 using CarRental.Domain.Models;
 using CarRental.Domain.Parameters;
+using CarRental.Service.Exceptions;
 using CarRental.Service.Interfaces;
 using CarRental.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -41,23 +42,19 @@ namespace CarRental.Service
 		/// <returns></returns>
 		public RezervationModel CreateBooking(RezervationCreationParameters parameters)
 		{
-			if (parameters == null)
-			{
-				return null;
-			}			
+			this.ValidateBookingParameters(parameters);
 
 			//try to get a client account first
 			var clientAccount = this.clientAccountService.Get(parameters.ClientId);
 
-			if(clientAccount == null && parameters.ClientAccount != null)
+			if (clientAccount == null && parameters.ClientAccount != null)
 			{
 				clientAccount = this.clientAccountService.Add(parameters.ClientAccount);
 			}
-			else if(parameters.ClientAccount == null && clientAccount == null)
+			else if (parameters.ClientAccount == null && clientAccount == null)
 			{
-				throw new InvalidOperationException("Client account not provided.");
+				throw new NotFoundException("Client account not found.");
 			}
-			
 
 			var dbRezervation = new Rezervation()
 			{
@@ -66,7 +63,7 @@ namespace CarRental.Service
 				PickUpDate = parameters.PickUpDate,
 				ReturnDate = parameters.ReturnDate,
 			};
-			
+
 			//get the car type
 			var carType = CarTypes.GetCarType(parameters.CarType);
 
@@ -75,11 +72,10 @@ namespace CarRental.Service
 			dbRezervation.DepositFee = carType.GetDepositFee(dbRezervation.RentaltFee);
 
 			this.dbContext.Rezervations.Add(dbRezervation);
-			this.dbContext.SaveChanges();			
+			this.dbContext.SaveChanges();
 
 			return dbRezervation.ToModel(clientAccount);
 		}
-
 		/// <summary>
 		/// Sets the flag which determines if the car is picked up.
 		/// </summary>
@@ -87,24 +83,13 @@ namespace CarRental.Service
 		/// <returns>True if the operation complete successfully</returns>
 		public bool PickUpCar(int rezervationId)
 		{
-			if(rezervationId < 1)
-			{
-				return false;
-			}
+			var dbRezervation = this.GetRezervation(rezervationId);
 
-			var dbRezervation = this.dbContext.Rezervations.SingleOrDefault(x => x.RezervationId == rezervationId);
-
-			if(dbRezervation == null)
-			{
-				return false;
-			}
-
-			// TODO: Maybe we should calculate the rental fee again, but it's not defined in the use case.
 			dbRezervation.IsPickedUp = true;
 			this.dbContext.SaveChanges();
 
-			return true;			
-		}
+			return true;
+		}		
 
 		/// <summary>
 		/// Sets the flag which indicates of the car is return and set rental fee if needed to be calculated.
@@ -113,21 +98,11 @@ namespace CarRental.Service
 		/// <returns>True if the operation complete successfully</returns>
 		public bool ReturnCar(int rezervationId)
 		{
-			if (rezervationId < 1)
-			{
-				return false;
-			}
+			var dbRezervation = this.GetRezervation(rezervationId);
 
-			var dbRezervation = this.dbContext.Rezervations.SingleOrDefault(x => x.RezervationId == rezervationId);
-
-			if (dbRezervation == null)
+			if (!dbRezervation.IsPickedUp || dbRezervation.IsCancelled)
 			{
-				return false;
-			}
-
-			if(!dbRezervation.IsPickedUp || dbRezervation.IsCancelled)
-			{
-				return false;
+				throw new InvalidOperationException("Car has not been picked up yet, or rezervation cancelled.");
 			}
 
 			dbRezervation.IsReturned = true;
@@ -152,21 +127,11 @@ namespace CarRental.Service
 		/// <returns>True if the operation complete successfully</returns>
 		public bool CancelRezervation(int rezervationId, decimal cancelationFeeRate)
 		{
-			if (rezervationId < 1)
-			{
-				return false;
-			}
-
-			var dbRezervation = this.dbContext.Rezervations.SingleOrDefault(x => x.RezervationId == rezervationId);
-
-			if (dbRezervation == null)
-			{
-				return false;
-			}
+			var dbRezervation = this.GetRezervation(rezervationId);
 
 			if(dbRezervation.IsReturned)
 			{
-				throw new InvalidOperationException("Error returning car.");
+				throw new InvalidOperationException("Car already returned.");
 			}
 
 			dbRezervation.IsCancelled = true;
@@ -199,7 +164,7 @@ namespace CarRental.Service
 		{
 			if(parameters == null)
 			{
-				throw new ArgumentNullException(nameof(parameters));
+				throw new InvalidParameterException(nameof(parameters));
 			}
 
 			var dbRezervations = this.dbContext.Rezervations.AsQueryable();
@@ -250,7 +215,57 @@ namespace CarRental.Service
 				dbRezervations = dbRezervations.Where(x => x.IsCancelled);
 			}
 
-			return new RezervationCollectionModel(dbRezervations.ToList().Select(x => x.ToModel()).ToList(), parameters.StartIndex, parameters.MaxItems);			
+			return new RezervationCollectionModel(dbRezervations.ToList().Select(x => x.ToModel()).ToList(), parameters.StartIndex, parameters.MaxItems);
+		}
+
+		private void ValidateBookingParameters(RezervationCreationParameters parameters)
+		{
+			if(parameters == null)
+			{
+				throw new InvalidParameterException("Parameters not provided.");
+			}
+
+			if (!Enum.IsDefined(typeof(CarTypeEnum), parameters.CarType))
+			{
+				throw new InvalidParameterException(nameof(parameters.CarType));
+			}
+
+			if (string.IsNullOrWhiteSpace(parameters.CarPlateNumber))
+			{
+				throw new InvalidParameterException(nameof(parameters.CarPlateNumber));
+			}
+
+			if (parameters.PickUpDate < DateTime.Now)
+			{
+				throw new InvalidParameterException($"{nameof(parameters.PickUpDate)} must be set after the current time.");
+			}
+
+			if (parameters.ReturnDate < parameters.PickUpDate)
+			{
+				throw new InvalidParameterException($"{nameof(parameters.ReturnDate)} must be set after {nameof(parameters.PickUpDate)}");
+			}
+
+			if (parameters.ClientAccount == null && parameters.ClientId < 1)
+			{
+				throw new InvalidParameterException("Client account not provided");
+			}
+		}
+
+		private Rezervation GetRezervation(int rezervationId)
+		{
+			if (rezervationId < 1)
+			{
+				throw new InvalidParameterException(nameof(rezervationId));
+			}
+
+			var dbRezervation = this.dbContext.Rezervations.SingleOrDefault(x => x.RezervationId == rezervationId);
+
+			if (dbRezervation == null)
+			{
+				throw new NotFoundException("Rezervation not found.");
+			}
+
+			return dbRezervation;
 		}
 	}
 }
