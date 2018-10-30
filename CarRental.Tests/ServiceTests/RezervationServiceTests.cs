@@ -3,6 +3,7 @@ using System.Linq;
 using CarRental.Data;
 using CarRental.Domain.Parameters;
 using CarRental.Service;
+using CarRental.Service.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static CarRental.Domain.Constants;
 
@@ -85,7 +86,7 @@ namespace CarRental.Tests.ServiceTests
 					Assert.Fail();
 
 				}
-				catch (InvalidOperationException)
+				catch (InvalidParameterException)
 				{
 				}		
 				catch
@@ -228,7 +229,7 @@ namespace CarRental.Tests.ServiceTests
 					rezervationService.FindRezervations(null);
 					Assert.Fail();
 				}
-				catch (ArgumentNullException)
+				catch (InvalidParameterException)
 				{
 				}
 				catch

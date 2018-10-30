@@ -83,7 +83,7 @@ namespace CarRental.Service
 			var dbClientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == parameters.ClientId);
 			if(dbClientAccount == null)
 			{
-				throw new InvalidOperationException("Client account not found.");
+				throw new NotFoundException("Client account not found.");
 			}
 
 			dbClientAccount.Email = parameters.Email;

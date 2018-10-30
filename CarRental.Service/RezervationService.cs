@@ -45,7 +45,7 @@ namespace CarRental.Service
 			this.ValidateBookingParameters(parameters);
 
 			//try to get a client account first
-			var clientAccount = this.clientAccountService.Get(parameters.ClientId);
+			var clientAccount = this.dbContext.ClientAccounts.SingleOrDefault(x => x.ClientId == parameters.ClientId)?.ToModel();
 
 			if (clientAccount == null && parameters.ClientAccount != null)
 			{

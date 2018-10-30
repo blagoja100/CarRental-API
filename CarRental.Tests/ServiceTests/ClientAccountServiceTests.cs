@@ -4,6 +4,7 @@ using System.Linq;
 using CarRental.Data;
 using CarRental.Domain.Parameters;
 using CarRental.Service;
+using CarRental.Service.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CarRental.Tests.ServiceTests
@@ -42,7 +43,7 @@ namespace CarRental.Tests.ServiceTests
 					service.Add(null);
 					Assert.Fail();
 				}
-				catch (ArgumentNullException)
+				catch (InvalidParameterException)
 				{
 				}
 				catch
@@ -55,7 +56,7 @@ namespace CarRental.Tests.ServiceTests
 					service.Add(new ClientAccountCreationParams());
 					Assert.Fail();
 				}
-				catch (InvalidOperationException)
+				catch (InvalidParameterException)
 				{
 				}
 				catch
@@ -91,7 +92,7 @@ namespace CarRental.Tests.ServiceTests
 					service.Update(null);
 					Assert.Fail();
 				}
-				catch (ArgumentNullException)
+				catch (InvalidParameterException)
 				{
 				}
 				catch
@@ -101,10 +102,16 @@ namespace CarRental.Tests.ServiceTests
 
 				try
 				{
-					service.Update(new ClientAccountModificationParams());
+					service.Update(new ClientAccountModificationParams()
+					{
+						ClientId = 1000,
+						Email = "Update_Client@mail.com",
+						FullName = "Update Client",
+						Phone = "+12345",
+					});
 					Assert.Fail();
 				}
-				catch (InvalidOperationException)
+				catch (NotFoundException)
 				{
 				}
 				catch
@@ -127,9 +134,32 @@ namespace CarRental.Tests.ServiceTests
 				Assert.AreEqual(clientAccount.Email, clientAccountModel.Email);
 				Assert.AreEqual(clientAccount.Phone, clientAccountModel.Phone);
 				Assert.AreEqual(clientAccount.FullName, clientAccountModel.FullName);
-	
-				clientAccountModel = service.Get(-1);
-				Assert.IsNull(clientAccountModel);				
+
+				try
+				{
+					service.Get(0);
+					Assert.Fail();
+				}
+				catch (InvalidParameterException)
+				{
+				}
+				catch
+				{
+					Assert.Fail();
+				}
+
+				try
+				{
+					service.Get(1000);
+					Assert.Fail();
+				}
+				catch (NotFoundException)
+				{
+				}
+				catch
+				{
+					Assert.Fail();
+				}
 			}
 		}
 	}
